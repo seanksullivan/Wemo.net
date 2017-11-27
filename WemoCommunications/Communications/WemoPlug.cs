@@ -1,5 +1,6 @@
 ﻿using Communications.Responses;
 using Communications.Utilities;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -32,7 +33,7 @@ namespace Communications
             var req = WebRequest ?? HttpRequest.CreateHttpWebRequest($"{ipAddress}:{Port}{Event}", ContentType, SoapAction, cmd, RequestMethod);
 
             // Construct the Soap Request
-            var reqContentSoap = Soap.GenerateWemoSoapRequest(cmd);
+            var reqContentSoap = Soap.GenerateGetRequest(cmd);
 
             // Write the Soap Request to the Request Stream
             using (var requestStream = req.GetRequestStream())
@@ -96,6 +97,128 @@ namespace Communications
                 .FirstOrDefault().Value;
 
             return value;
+        }
+
+        /// <summary>
+        /// Temp
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <param name="ipAddress"></param>
+        /// <param name="targetStatus"></param>
+        /// <returns></returns>
+        public bool SetBinaryState(Soap.WemoSetBinaryStateCommands cmd, string ipAddress, bool targetStatus)
+        {
+            bool success = false;
+            var target = Convert.ToInt32(targetStatus);
+
+            //string IPADDR = "192.168.1.4";
+
+            // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object, else create
+            var request = WebRequest ?? HttpRequest.CreateHttpWebRequest($"{ipAddress}:{Port}{Event}", ContentType, SoapAction, "SetBinaryState", RequestMethod);
+
+            var response = GetResponse(cmd.ToString(), request, target.ToString());
+            var responsObj = GetResponseObject<SetBinaryStateResponse>(response);
+
+            if (responsObj.BinaryState == "0" || responsObj.BinaryState == "1")
+            {
+                success = true;
+            }
+            return success;
+        }
+
+        public WemoResponse SetBinaryState__(Soap.WemoSetBinaryStateCommands cmd, string ipAddress, string targetStatus)
+        {
+            WemoResponse response;
+
+            //string IPADDR = "192.168.1.4";
+
+            // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object, else create
+            var req = WebRequest ?? HttpRequest.CreateHttpWebRequest($"{ipAddress}:{Port}{Event}", ContentType, SoapAction, "SetBinaryState", RequestMethod);
+
+            // Construct the Soap Request
+            var reqContentSoap = Soap.GenerateSetBinaryStateRequest(cmd.ToString(), targetStatus);
+
+            // Write the Soap Request to the Request Stream
+            using (var requestStream = req.GetRequestStream())
+            {
+                var encoding = new UTF8Encoding();
+                requestStream.Write(encoding.GetBytes(reqContentSoap), 0, encoding.GetByteCount(reqContentSoap));
+            }
+
+            // Send the Request and acquire the Response
+            try
+            {
+                var httpResponse = req.GetResponse() as HttpWebResponse;
+                using (var rspStm = httpResponse.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(rspStm))
+                    {
+                        // Translate the Http Response to our own Response object
+                        response = new WemoResponse
+                        {
+                            Description = httpResponse.StatusDescription,
+                            StatusCode = httpResponse.StatusCode.ToString(),
+                            ResponseBody = reader.ReadToEnd()
+                        };
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                response = new WemoResponse
+                {
+                    Description = $"Exception message: {ex.Message}",
+                    StatusCode = ex.Status.ToString(),
+                    ResponseBody = string.Empty
+                };
+            }
+
+            return response;
+        }
+
+        private WemoResponse GetResponse(string cmd, HttpWebRequest request, string targetStatus)
+        {
+            WemoResponse response;
+
+            // Construct the Soap Request
+            var reqContentSoap = Soap.GenerateSetBinaryStateRequest(cmd, targetStatus);
+
+            // Write the Soap Request to the Request Stream
+            using (var requestStream = request.GetRequestStream())
+            {
+                var encoding = new UTF8Encoding();
+                requestStream.Write(encoding.GetBytes(reqContentSoap), 0, encoding.GetByteCount(reqContentSoap));
+            }
+
+            // Send the Request and acquire the Response
+            try
+            {
+                var httpResponse = request.GetResponse() as HttpWebResponse;
+                using (var rspStm = httpResponse.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(rspStm))
+                    {
+                        // Translate the Http Response to our own Response object
+                        response = new WemoResponse
+                        {
+                            Description = httpResponse.StatusDescription,
+                            StatusCode = httpResponse.StatusCode.ToString(),
+                            ResponseBody = reader.ReadToEnd()
+                        };
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                response = new WemoResponse
+                {
+                    Description = $"Exception message: {ex.Message}",
+                    StatusCode = ex.Status.ToString(),
+                    ResponseBody = string.Empty
+                };
+            }
+
+            return response;
         }
     }
 }

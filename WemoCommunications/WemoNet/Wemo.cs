@@ -36,6 +36,33 @@ namespace WemoNet
             return value;
         }
 
+        //public WemoResponse Set(Soap.WemoSetBinaryStateCommands cmd, string ipAddress, string targetStatus)
+        //{
+        //    var wemo = new WemoPlug { WebRequest = this.WebRequest };
+        //    var response = wemo.SetBinaryState(cmd, ipAddress, targetStatus);
+        //    return response;
+        //}
+
+        public bool ToggleSwitch(Soap.WemoSetBinaryStateCommands cmd, string ipAddress)
+        {
+            var wemo = new WemoPlug { WebRequest = this.WebRequest };
+
+            var existingState = GetResponseObject<GetBinaryStateResponse>(Soap.WemoGetCommands.GetBinaryState, ipAddress);
+            var binaryStateValue = false;
+            switch (existingState.BinaryState)
+            {
+                case "0":
+                    binaryStateValue = true;
+                    break;
+
+                case "1":
+                    binaryStateValue = false;
+                    break;
+            }
+
+            var response = wemo.SetBinaryState(cmd, ipAddress, binaryStateValue);
+            return response;
+        }
     }
 
 }

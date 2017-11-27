@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemoNet.UnitTests", "WemoNe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{9F907BEC-14DF-4D28-A720-0BED4B64514E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications.UnitTests", "Communications.UnitTests\Communications.UnitTests.csproj", "{09E03E24-A291-42BB-9562-E25B42081F75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{2DD33480-D7CC-4F16-8C03-8FF19B733287}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DD33480-D7CC-4F16-8C03-8FF19B733287}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DD33480-D7CC-4F16-8C03-8FF19B733287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09E03E24-A291-42BB-9562-E25B42081F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09E03E24-A291-42BB-9562-E25B42081F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09E03E24-A291-42BB-9562-E25B42081F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09E03E24-A291-42BB-9562-E25B42081F75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BBBDE724-BF50-4165-BA07-DDB26C722553} = {9F907BEC-14DF-4D28-A720-0BED4B64514E}
 		{2DD33480-D7CC-4F16-8C03-8FF19B733287} = {9F907BEC-14DF-4D28-A720-0BED4B64514E}
+		{09E03E24-A291-42BB-9562-E25B42081F75} = {9F907BEC-14DF-4D28-A720-0BED4B64514E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AB37226-D5CC-4FBC-8CDD-7047568A2244}
