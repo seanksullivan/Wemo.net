@@ -1,0 +1,2 @@
+﻿The Wemo/Belkin Soap service does not provide a WSDL, which means we cannot rely on it!
+I chose to parse the raw Soap Xml document that is the result of a successful call; the other method would be to manually create a WSDL file, but this may prove to be even more unreliable.

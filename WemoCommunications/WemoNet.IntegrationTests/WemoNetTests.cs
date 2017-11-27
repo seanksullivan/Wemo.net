@@ -16,7 +16,7 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetResponse(Soap.WemoGetCommands.GetHomeInfo, ipAddress);
+            var result = wemo.GetResponse(Soap.WemoGetCommands.GetWatchdogFile, ipAddress);
 
             // ASSERT
             Assert.IsTrue(result.StatusCode == "OK", "Expected Http StatusCode not returned");

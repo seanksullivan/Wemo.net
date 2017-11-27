@@ -1,3 +1,4 @@
+using Communications.Responses;
 using Communications.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,19 +19,19 @@ namespace WemoNet.UnitTests
             // ARRANGE
             var ipAddress = "http://192.168.1.4";
             // Acquire the soap/Xml data that we wish to supply within our mock'd HttpWebRequest and HttpWebResponse
-
             // Read Text directly instead of Bytes - so that our Xml comparison is easier (aka, BOM)
             var responseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\GetHomeInfoResponse.xml"));
-            var wemo = new Wemo();
 
             // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
             var mockRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", responseBytes);
 
+            var wemo = new Wemo
+            {
+                // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
+                WebRequest = mockRequest
+            };
 
             // ACT
-
-            // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
-            wemo.WebRequest = mockRequest;
             var result = wemo.GetResponse(Soap.WemoGetCommands.GetHomeInfo, ipAddress);
             var resultBodyXml = XDocument.Parse(result.ResponseBody);
 
@@ -43,6 +44,29 @@ namespace WemoNet.UnitTests
             Assert.IsTrue(xmlCompares, "Expected ResponseBody not returned");
         }
 
+        [TestMethod]
+        [DeploymentItem("TestData")]
+        public void GetResponseObject_MockCommunications_Verify()
+        {
+            // ARRANGE
+            var ipAddress = "http://192.168.1.4";
+            // Acquire the soap/Xml data that we wish to supply within our mock'd HttpWebRequest and HttpWebResponse
+            // Read Text directly instead of Bytes - so that our Xml comparison is easier (aka, BOM)
+            var responseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\GetHomeInfoResponse.xml"));
+
+            // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
+            var mockRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", responseBytes);
+
+            var wemo = new Wemo
+            {
+                // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
+                WebRequest = mockRequest
+            };
+
+            // ACT
+            var result = wemo.GetResponseObject<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress);
+
+        }
 
         private static HttpWebRequest CreateMockHttpWebRequest(HttpStatusCode httpStatusCode, string statusDescription, byte[] responseBytes)
         {

@@ -2,6 +2,7 @@
 using Communications.Utilities;
 using Communications.Responses;
 using System.Net;
+using System;
 
 namespace WemoNet
 {
@@ -21,11 +22,20 @@ namespace WemoNet
         public T GetResponseObject<T>(Soap.WemoGetCommands cmd, string ipAddress)
         {
             var wemo = new WemoPlug { WebRequest = this.WebRequest };
-            var response = wemo.GetResponse(cmd, ipAddress);
 
+            var response = wemo.GetResponse(cmd, ipAddress);
             var objResponse = wemo.GetResponseObject<T>(response);
-            return objResponse;
+            return (T)objResponse;
         }
+        public string GetResponseValue(Soap.WemoGetCommands cmd, string ipAddress)
+        {
+            var wemo = new WemoPlug { WebRequest = this.WebRequest };
+
+            var response = wemo.GetResponse(cmd, ipAddress);
+            var value = wemo.GetResponseValue(response);
+            return value;
+        }
+
     }
 
 }

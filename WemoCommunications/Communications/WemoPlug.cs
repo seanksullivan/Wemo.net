@@ -8,6 +8,9 @@ using System.Xml.Linq;
 
 namespace Communications
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class WemoPlug
     {
         #region Public Properties
@@ -78,6 +81,21 @@ namespace Communications
             // Deserialize to the specific class
             var responseObject = SerializationUtil.Deserialize<T>(doc);
             return responseObject;
+        }
+
+        public string GetResponseValue(WemoResponse response)
+        {
+            var value = string.Empty;
+            
+            // Soap parsing
+            XNamespace ns = "http://schemas.xmlsoap.org/soap/envelope/";
+            value = XDocument.Parse(response.ResponseBody)
+                .Descendants()
+                .Descendants(ns + "Body").FirstOrDefault()
+                .Descendants()
+                .FirstOrDefault().Value;
+
+            return value;
         }
     }
 }
