@@ -1,9 +1,7 @@
-using Communications.Responses;
 using Communications.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Xml.Linq;

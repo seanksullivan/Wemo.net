@@ -1,8 +1,6 @@
 using Communications.Responses;
 using Communications.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace WemoNet.IntegrationTests
 {

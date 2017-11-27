@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemoNet.IntegrationTests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemoNet.UnitTests", "WemoNet.UnitTests\WemoNet.UnitTests.csproj", "{2DD33480-D7CC-4F16-8C03-8FF19B733287}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{9F907BEC-14DF-4D28-A720-0BED4B64514E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BBBDE724-BF50-4165-BA07-DDB26C722553} = {9F907BEC-14DF-4D28-A720-0BED4B64514E}
+		{2DD33480-D7CC-4F16-8C03-8FF19B733287} = {9F907BEC-14DF-4D28-A720-0BED4B64514E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AB37226-D5CC-4FBC-8CDD-7047568A2244}
