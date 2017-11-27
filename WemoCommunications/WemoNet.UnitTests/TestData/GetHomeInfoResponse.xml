@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+  <s:Body>
+    <u:GetHomeInfoResponse xmlns:u="urn:Belkin:service:basicevent:1">
+      <HomeInfo>0|5776337|fYXQevUu6hvVYpeBa/x7CVFzBy7oFRchUz9mMrn3XhNfAH3hCLKQTPb9u+az4HeySiYwUO6l51niYW2+p2JeRA==|</HomeInfo>
+    </u:GetHomeInfoResponse>
+  </s:Body>
+</s:Envelope>
