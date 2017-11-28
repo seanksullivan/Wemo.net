@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0"?>
 <scpd xmlns="urn:Belkin:service-1-0">
   <!--view-source:http://192.168.1.4:49153/eventservice.xml-->
+  <!--http://192.168.1.28:49153/eventservice.xml-->
   <specVersion>
     <major>1</major>
     <minor>0</minor>

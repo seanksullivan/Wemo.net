@@ -64,6 +64,36 @@ namespace WemoNet
             var response = await plug.SetBinaryStateAsync(cmd, ipAddress, binaryStateValue);
             return response;
         }
+
+        public async Task<bool> TurnOnWemoPlugAsync(string ipAddress)
+        {
+            var success = await SetWemoPlugAsync(ipAddress, true);
+            return success;
+        }
+
+        public async Task<bool> TurnOffWemoPlugAsync(string ipAddress)
+        {
+            var success = await SetWemoPlugAsync(ipAddress, false);
+            return success;
+        }
+
+        private async Task<bool> SetWemoPlugAsync(string ipAddress, bool on)
+        {
+            bool success = true;
+            var plug = new WemoPlug { WebRequest = this.WebRequest };
+
+            var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(Soap.WemoGetCommands.GetBinaryState, ipAddress);
+            if (on && existingState.BinaryState == "0")
+            {
+                success = await plug.SetBinaryStateAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress, true);
+            }
+
+            if (!on && existingState.BinaryState == "1")
+            {
+                success = await plug.SetBinaryStateAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress, false);
+            }
+            return success;
+        }
     }
 
 }

@@ -2,6 +2,7 @@ using Communications.Responses;
 using Communications.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Threading.Tasks;
 
 namespace WemoNet.IntegrationTests
 {
@@ -52,6 +53,36 @@ namespace WemoNet.IntegrationTests
 
             // ACT
             var result = wemo.ToggleWemoPlugAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress).GetAwaiter().GetResult();
+
+            // ASSERT
+            Assert.IsTrue(result, "The switch toggle command was not successful as expected");
+        }
+
+        [TestMethod]
+        [DeploymentItem("TestData")]
+        public async Task TurnOnWemoPlug_Verify()
+        {
+            // ARRANGE
+            var ipAddress = "http://192.168.1.4";
+            var wemo = new Wemo();
+
+            // ACT
+            var result = await wemo.TurnOnWemoPlugAsync(ipAddress);
+
+            // ASSERT
+            Assert.IsTrue(result, "The switch toggle command was not successful as expected");
+        }
+
+        [TestMethod]
+        [DeploymentItem("TestData")]
+        public async Task TurnOffWemoPlug_Verify()
+        {
+            // ARRANGE
+            var ipAddress = "http://192.168.1.4";
+            var wemo = new Wemo();
+
+            // ACT
+            var result = await wemo.TurnOffWemoPlugAsync(ipAddress);
 
             // ASSERT
             Assert.IsTrue(result, "The switch toggle command was not successful as expected");
