@@ -2,7 +2,6 @@
 using Communications.Utilities;
 using Communications.Responses;
 using System.Net;
-using System;
 using System.Threading.Tasks;
 
 namespace WemoNet
@@ -13,35 +12,42 @@ namespace WemoNet
         public HttpWebRequest WebRequest { get; set; }
         #endregion
 
-        public async Task<WemoResponse> GetResponseAsync(Soap.WemoGetCommands cmd, string ipAddress)
+        /// <summary>
+        /// Call the command to construct a soap Http Request - returning a translated response object 
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
+        public async Task<WemoResponse> GetWemoPlugResponseAsync(Soap.WemoGetCommands cmd, string ipAddress)
         {
-            var wemo = new WemoPlug { WebRequest = this.WebRequest };
-            var response = await wemo.GetResponseAsync(cmd, ipAddress);
+            var plug = new WemoPlug { WebRequest = this.WebRequest };
+            var response = await plug.GetResponseAsync(cmd, ipAddress);
             return response;
         }
 
-        public async Task<T> GetResponseObjectAsync<T>(Soap.WemoGetCommands cmd, string ipAddress)
+        public async Task<T> GetWemoResponseObjectAsync<T>(Soap.WemoGetCommands cmd, string ipAddress)
         {
-            var wemo = new WemoPlug { WebRequest = this.WebRequest };
+            var plug = new WemoPlug { WebRequest = this.WebRequest };
 
-            var response = await wemo.GetResponseAsync(cmd, ipAddress);
-            var objResponse = wemo.GetResponseObject<T>(response);
+            var response = await plug.GetResponseAsync(cmd, ipAddress);
+            var objResponse = plug.GetResponseObject<T>(response);
             return (T)objResponse;
         }
-        public async Task<string> GetResponseValue(Soap.WemoGetCommands cmd, string ipAddress)
-        {
-            var wemo = new WemoPlug { WebRequest = this.WebRequest };
 
-            var response = await wemo.GetResponseAsync(cmd, ipAddress);
-            var value = wemo.GetResponseValue(response);
+        public async Task<string> GetWemoResponseValueAsync(Soap.WemoGetCommands cmd, string ipAddress)
+        {
+            var plug = new WemoPlug { WebRequest = this.WebRequest };
+
+            var response = await plug.GetResponseAsync(cmd, ipAddress);
+            var value = plug.GetResponseValue(response);
             return value;
         }
 
-        public async Task<bool> ToggleSwitchAsync(Soap.WemoSetBinaryStateCommands cmd, string ipAddress)
+        public async Task<bool> ToggleWemoPlugAsync(Soap.WemoSetBinaryStateCommands cmd, string ipAddress)
         {
-            var wemo = new WemoPlug { WebRequest = this.WebRequest };
+            var plug = new WemoPlug { WebRequest = this.WebRequest };
 
-            var existingState = await GetResponseObjectAsync<GetBinaryStateResponse>(Soap.WemoGetCommands.GetBinaryState, ipAddress);
+            var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(Soap.WemoGetCommands.GetBinaryState, ipAddress);
 
             var binaryStateValue = false;
             switch (existingState.BinaryState)
@@ -55,7 +61,7 @@ namespace WemoNet
                     break;
             }
 
-            var response = await wemo.SetBinaryStateAsync(cmd, ipAddress, binaryStateValue);
+            var response = await plug.SetBinaryStateAsync(cmd, ipAddress, binaryStateValue);
             return response;
         }
     }

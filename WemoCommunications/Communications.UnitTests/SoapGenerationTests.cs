@@ -9,7 +9,7 @@ namespace Communications.UnitTests
         [TestMethod]
         public void GenerateSetBinaryStateRequest_()
         {
-            //var soap = Soap.GenerateSetBinaryStateRequest(Soap.WemoSetBinaryStateCommands.BinaryState, "1");
+            var soap = Soap.GenerateSetBinaryStateRequest(Soap.WemoSetBinaryStateCommands.BinaryState.ToString(), "1");
         }
     }
 }

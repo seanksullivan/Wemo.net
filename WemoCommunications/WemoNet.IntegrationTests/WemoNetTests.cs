@@ -17,7 +17,7 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetResponseAsync(Soap.WemoGetCommands.GetWatchdogFile, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetWatchdogFile, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsTrue(result.StatusCode == "OK", "Expected Http StatusCode not returned");
@@ -32,7 +32,7 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.GetWemoResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsNotNull(result.HomeInfo, "The expected type was not returned");
@@ -51,7 +51,7 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.ToggleSwitchAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.ToggleWemoPlugAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsTrue(result, "The switch toggle command was not successful as expected");

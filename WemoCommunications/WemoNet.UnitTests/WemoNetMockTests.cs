@@ -33,7 +33,7 @@ namespace WemoNet.UnitTests
             };
 
             // ACT
-            var result = wemo.GetResponseAsync(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
             var resultBodyXml = XDocument.Parse(result.ResponseBody);
 
             // ASSERT
@@ -65,7 +65,7 @@ namespace WemoNet.UnitTests
             };
 
             // ACT
-            var result = wemo.GetResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.GetWemoResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
 
         }
 
