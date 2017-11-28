@@ -17,7 +17,7 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetResponse(Soap.WemoGetCommands.GetWatchdogFile, ipAddress);
+            var result = wemo.GetResponseAsync(Soap.WemoGetCommands.GetWatchdogFile, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsTrue(result.StatusCode == "OK", "Expected Http StatusCode not returned");
@@ -32,7 +32,7 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetResponseObject<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress);
+            var result = wemo.GetResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsNotNull(result.HomeInfo, "The expected type was not returned");
@@ -51,18 +51,7 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var response = wemo.GetResponseObject<GetBinaryStateResponse>(Soap.WemoGetCommands.GetBinaryState, ipAddress);
-            switch (response.BinaryState)
-            {
-                case "0":
-                    binaryStateValue = "1";
-                    break;
-
-                case "1":
-                    binaryStateValue = "0";
-                    break;
-            }
-            var result = wemo.ToggleSwitch(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress);
+            var result = wemo.ToggleSwitchAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsTrue(result, "The switch toggle command was not successful as expected");

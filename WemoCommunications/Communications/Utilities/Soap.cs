@@ -28,10 +28,6 @@ namespace Communications.Utilities
 
         public static string GenerateSetBinaryStateRequest(string cmd, string targetStatus)
         {
-            //reqContent += "<u:SetBinaryState xmlns:u=\"urn:Belkin:service:basicevent:1\">";
-            //reqContent += "<BinaryState>" + TARGETSTATUS + "</BinaryState>";
-            //reqContent += "</u:SetBinaryState>";
-
             XNamespace ns = "http://schemas.xmlsoap.org/soap/envelope/";
             XNamespace basicEventNs = "urn:Belkin:service:basicevent:1";
 

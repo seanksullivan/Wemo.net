@@ -5,6 +5,7 @@ using Moq;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace WemoNet.UnitTests
@@ -32,7 +33,7 @@ namespace WemoNet.UnitTests
             };
 
             // ACT
-            var result = wemo.GetResponse(Soap.WemoGetCommands.GetHomeInfo, ipAddress);
+            var result = wemo.GetResponseAsync(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
             var resultBodyXml = XDocument.Parse(result.ResponseBody);
 
             // ASSERT
@@ -64,7 +65,7 @@ namespace WemoNet.UnitTests
             };
 
             // ACT
-            var result = wemo.GetResponseObject<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress);
+            var result = wemo.GetResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
 
         }
 
@@ -92,9 +93,9 @@ namespace WemoNet.UnitTests
             response.Setup(c => c.StatusDescription).Returns(statusDescription);
 
             var request = new Mock<HttpWebRequest>();
-            request.Setup(c => c.GetRequestStream()).Returns(requestStream);
+            request.Setup(c => c.GetRequestStreamAsync()).ReturnsAsync(requestStream);
 
-            request.Setup(s => s.GetResponse()).Returns(response.Object);
+            request.Setup(s => s.GetResponseAsync()).ReturnsAsync(response.Object);
             return request.Object;
         }
     }
