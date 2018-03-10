@@ -4,9 +4,14 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeCoverage" Version="1.0.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Moq" Version="4.7.145" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
@@ -19,7 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestData\GetBinaryStateResponse.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\GetHomeInfoResponse.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\SetBinaryStateResponse.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

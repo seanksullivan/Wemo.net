@@ -2,6 +2,7 @@ using Communications.Responses;
 using Communications.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -29,7 +30,7 @@ namespace WemoNet.UnitTests
             var wemo = new Wemo
             {
                 // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
-                WebRequest = mockRequest
+                GetResponseWebRequest = mockRequest
             };
 
             // ACT
@@ -61,12 +62,42 @@ namespace WemoNet.UnitTests
             var wemo = new Wemo
             {
                 // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
-                WebRequest = mockRequest
+                GetResponseWebRequest =  mockRequest
             };
 
             // ACT
             var result = wemo.GetWemoResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
 
+        }
+
+        [TestMethod]
+        [DeploymentItem("TestData")]
+        public void TurnOnWemoPlugAsync_Verify()
+        {
+            // ARRANGE
+            var ipAddress = "http://192.168.1.44444";
+            // Acquire the soap/Xml data that we wish to supply within our mock'd HttpWebRequest and HttpWebResponse
+            // Read Text directly instead of Bytes - so that our Xml comparison is easier (aka, BOM)
+            var getBinaryStateResponseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\GetBinaryStateResponse.xml"));
+
+            // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
+            var mockGetResponseWebRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", getBinaryStateResponseBytes);
+
+            var setBinaryStateResponseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\SetBinaryStateResponse.xml"));
+
+            // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
+            var setWebRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", setBinaryStateResponseBytes);
+
+            var wemo = new Wemo
+            {
+                // Minimal inversion of control:
+                // Set the WebRequest property to provide our own Mock'd HttpWebRequest/Response
+                GetResponseWebRequest = mockGetResponseWebRequest,
+                SetResponseWebRequest = setWebRequest
+            };
+
+            // ACT
+            var result = wemo.TurnOnWemoPlugAsync(ipAddress).GetAwaiter().GetResult();
         }
 
         private static HttpWebRequest CreateMockHttpWebRequest(HttpStatusCode httpStatusCode, string statusDescription, byte[] responseBytes)
