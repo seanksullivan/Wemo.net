@@ -11,4 +11,8 @@
     <copyright>Copyright 2017 (c) MIT License. All rights reserved.</copyright>
     <tags>wemo smartplug wemo.net</tags>
   </metadata>
+  <files>
+    <file src="**\*.dll" target="lib" />
+    <file src="**\*.pdb" target="lib" />
+  </files>
 </package>
