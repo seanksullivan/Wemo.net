@@ -2,6 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Communications</AssemblyName>
+    <RootNamespace>Communications</RootNamespace>
+    <PackageId>Communications</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Sean K. Sullivan</Authors>
+    <Description>C# library providing easy communications with Wemo devices</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>First release</PackageReleaseNotes>
+    <Copyright>Copyright 2017 (c) MIT License. All rights reserved.</Copyright>
+    <PackageTags>wemo smartplug wemo.net</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>1.0.0.0</Version>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>

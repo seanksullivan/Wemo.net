@@ -63,7 +63,7 @@ namespace WemoNet.IntegrationTests
         public async Task TurnOnWemoPlug_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.4";
+            var ipAddress = "http://192.168.1.5";
             var wemo = new Wemo();
 
             // ACT
@@ -78,7 +78,7 @@ namespace WemoNet.IntegrationTests
         public async Task TurnOffWemoPlug_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.4";
+            var ipAddress = "http://192.168.1.5";
             var wemo = new Wemo();
 
             // ACT
