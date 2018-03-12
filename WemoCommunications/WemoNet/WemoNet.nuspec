@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>WemoNet</id>
+    <version>2.0.0</version>
+    <authors>Sean K. Sullivan</authors>
+    <owners>Sean K. Sullivan</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C# library providing easy communications with Wemo devices</description>
+    <releaseNotes>First release</releaseNotes>
+    <copyright>Copyright 2017 (c) MIT License. All rights reserved.</copyright>
+    <tags>wemo smartplug wemo.net</tags>
+  </metadata>
+</package>
