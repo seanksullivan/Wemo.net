@@ -12,8 +12,8 @@
     <tags>wemo smartplug wemo.net</tags>
   </metadata>
   <files>
-    <file src="**\*.dll" target="lib\netcoreapp2.0" />
-    <file src="**\*.pdb" target="lib\netcoreapp2.0" />
-    <file src="obj\*" target="obj" exclude="obj\*" />
+    <file src="**\bin\*.dll" target="lib\netcoreapp2.0" />
+    <file src="**\bin\*.pdb" target="lib\netcoreapp2.0" />
+    <file src="**\obj\*" target="lib\netcoreapp2.0" exclude="**\*" />
   </files>
 </package>
