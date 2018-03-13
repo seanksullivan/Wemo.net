@@ -62,7 +62,7 @@ namespace WemoNet.UnitTests
             var wemo = new Wemo
             {
                 // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
-                GetResponseWebRequest =  mockRequest
+                GetResponseWebRequest = mockRequest
             };
 
             // ACT

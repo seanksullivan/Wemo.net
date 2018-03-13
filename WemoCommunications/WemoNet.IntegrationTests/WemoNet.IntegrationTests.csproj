@@ -19,7 +19,7 @@
     <FileVersion>1.1.0.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>WemoNet.IntegrationTests.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>WemoNetIntTests.snk</AssemblyOriginatorKeyFile>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
   </PropertyGroup>
 

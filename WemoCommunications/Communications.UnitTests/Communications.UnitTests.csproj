@@ -20,7 +20,7 @@
     <Product>Communications.UnitTests</Product>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>Communications.UnitTests.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>CommTests.snk</AssemblyOriginatorKeyFile>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
   </PropertyGroup>
 
