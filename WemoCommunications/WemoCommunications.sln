@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communications", "Communications\Communications.csproj", "{A03DC669-626F-4338-90FD-1D851A32A45B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemoNet", "WemoNet\WemoNet.csproj", "{EF9B711B-D559-407C-A958-44D0BA2D242C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemoNet.IntegrationTests", "WemoNet.IntegrationTests\WemoNet.IntegrationTests.csproj", "{BBBDE724-BF50-4165-BA07-DDB26C722553}"
@@ -13,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemoNet.UnitTests", "WemoNe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{9F907BEC-14DF-4D28-A720-0BED4B64514E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communications.UnitTests", "Communications.UnitTests\Communications.UnitTests.csproj", "{09E03E24-A291-42BB-9562-E25B42081F75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communications.UnitTests", "Communications.UnitTests\Communications.UnitTests.csproj", "{09E03E24-A291-42BB-9562-E25B42081F75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A03DC669-626F-4338-90FD-1D851A32A45B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A03DC669-626F-4338-90FD-1D851A32A45B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A03DC669-626F-4338-90FD-1D851A32A45B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A03DC669-626F-4338-90FD-1D851A32A45B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF9B711B-D559-407C-A958-44D0BA2D242C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF9B711B-D559-407C-A958-44D0BA2D242C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF9B711B-D559-407C-A958-44D0BA2D242C}.Release|Any CPU.ActiveCfg = Release|Any CPU

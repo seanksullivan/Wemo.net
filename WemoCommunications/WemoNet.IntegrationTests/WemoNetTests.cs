@@ -1,8 +1,8 @@
-using Communications.Responses;
-using Communications.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using WemoNet.Responses;
+using WemoNet.Utilities;
 
 namespace WemoNet.IntegrationTests
 {
@@ -14,7 +14,7 @@ namespace WemoNet.IntegrationTests
         public void GetResponse_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.4";
+            var ipAddress = "http://192.168.1.5";
             var wemo = new Wemo();
 
             // ACT
@@ -29,7 +29,7 @@ namespace WemoNet.IntegrationTests
         public void GetResponseObject_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.4";
+            var ipAddress = "http://192.168.1.5";
             var wemo = new Wemo();
 
             // ACT
@@ -47,7 +47,7 @@ namespace WemoNet.IntegrationTests
             var test = true;
             var wow = Convert.ToInt32(test);
 
-            var ipAddress = "http://192.168.1.4";
+            var ipAddress = "http://192.168.1.5";
             var binaryStateValue = "0";
             var wemo = new Wemo();
 

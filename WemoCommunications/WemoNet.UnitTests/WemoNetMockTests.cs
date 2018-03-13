@@ -1,5 +1,3 @@
-using Communications.Responses;
-using Communications.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
@@ -8,6 +6,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using WemoNet.Responses;
+using WemoNet.Utilities;
 
 namespace WemoNet.UnitTests
 {
@@ -19,7 +19,7 @@ namespace WemoNet.UnitTests
         public void GetResponse_MockCommunications_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.4";
+            var ipAddress = "http://192.168.1.5";
             // Acquire the soap/Xml data that we wish to supply within our mock'd HttpWebRequest and HttpWebResponse
             // Read Text directly instead of Bytes - so that our Xml comparison is easier (aka, BOM)
             var responseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\GetHomeInfoResponse.xml"));
@@ -51,7 +51,7 @@ namespace WemoNet.UnitTests
         public void GetResponseObject_MockCommunications_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.4";
+            var ipAddress = "http://192.168.1.5";
             // Acquire the soap/Xml data that we wish to supply within our mock'd HttpWebRequest and HttpWebResponse
             // Read Text directly instead of Bytes - so that our Xml comparison is easier (aka, BOM)
             var responseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\GetHomeInfoResponse.xml"));

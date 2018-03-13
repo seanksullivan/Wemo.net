@@ -1,8 +1,8 @@
-﻿using Communications;
-using Communications.Utilities;
-using Communications.Responses;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
+using WemoNet.Communications;
+using WemoNet.Responses;
+using WemoNet.Utilities;
 
 namespace WemoNet
 {

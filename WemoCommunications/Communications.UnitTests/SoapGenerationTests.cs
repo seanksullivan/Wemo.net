@@ -1,5 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Communications.Utilities;
+using WemoNet.Utilities;
 
 namespace Communications.UnitTests
 {

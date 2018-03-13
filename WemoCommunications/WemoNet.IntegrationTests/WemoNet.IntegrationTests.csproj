@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Communications\Communications.csproj" />
     <ProjectReference Include="..\WemoNet\WemoNet.csproj" />
   </ItemGroup>
 
