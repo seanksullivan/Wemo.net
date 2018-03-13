@@ -7,19 +7,23 @@
     <PackageId>WemoNet</PackageId>
     <PackageVersion>1.2.0.0</PackageVersion>
     <Authors>Sean K. Sullivan</Authors>
-    <Description>C# library providing easy communications with local Wemo devices.</Description>
+    <Description>.NetCore 2.0 library providing easy communications with local Wemo devices.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) MIT License. All rights reserved.</Copyright>
     <PackageTags>wemo smartplug wemo.net</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <AssemblyVersion>1.2.0.0</AssemblyVersion>
     <FileVersion>1.2.0.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>WemoNetSafe.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageLicenseUrl>https://github.com/seanksullivan/Wemo.net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/seanksullivan/Wemo.net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/seanksullivan/Wemo.net</RepositoryUrl>
+    <RepositoryType />
   </PropertyGroup>
 
   <ItemGroup>
