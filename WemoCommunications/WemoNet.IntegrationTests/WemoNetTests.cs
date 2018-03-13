@@ -10,7 +10,6 @@ namespace WemoNet.IntegrationTests
     public class WemoNetTests
     {
         [TestMethod]
-        [DeploymentItem("TestData")]
         public void GetResponse_Verify()
         {
             // ARRANGE
@@ -25,7 +24,6 @@ namespace WemoNet.IntegrationTests
         }
 
         [TestMethod]
-        [DeploymentItem("TestData")]
         public void GetResponseObject_Verify()
         {
             // ARRANGE
@@ -40,26 +38,23 @@ namespace WemoNet.IntegrationTests
         }
 
         [TestMethod]
-        [DeploymentItem("TestData")]
-        public void SetBinaryState_On_Verify()
+        public void ToggleWemoPlugAsync_Verify()
         {
             // ARRANGE
             var test = true;
             var wow = Convert.ToInt32(test);
 
             var ipAddress = "http://192.168.1.5";
-            var binaryStateValue = "0";
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.ToggleWemoPlugAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.ToggleWemoPlugAsync(ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsTrue(result, "The switch toggle command was not successful as expected");
         }
 
         [TestMethod]
-        [DeploymentItem("TestData")]
         public async Task TurnOnWemoPlug_Verify()
         {
             // ARRANGE
@@ -74,7 +69,6 @@ namespace WemoNet.IntegrationTests
         }
 
         [TestMethod]
-        [DeploymentItem("TestData")]
         public async Task TurnOffWemoPlug_Verify()
         {
             // ARRANGE
