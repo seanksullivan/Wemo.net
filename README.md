@@ -1,7 +1,5 @@
 # Wemo.net
-.NetCore 2.0 (C#) library providing easy communications with Wemo devices.
-
-![Build Status](https://sullivan.visualstudio.com/_apis/public/build/definitions/9787f41a-0e09-4f34-a485-b4fe4f1d8269/4/badge)
+.Net Standard 2.0 (C#) library providing easy, multi-platform communications with Wemo devices.
 
 ## Wemo Communications
 Communicate with your locally-accessible Wemo plug - this will not work externally via the internet (of which would require access to the Wemo network).
