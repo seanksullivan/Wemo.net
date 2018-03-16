@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>WemoNet</AssemblyName>
     <RootNamespace>WemoNet</RootNamespace>
     <PackageId>WemoNet</PackageId>
-    <PackageVersion>1.2.0.0</PackageVersion>
+    <PackageVersion>1.3.0.0</PackageVersion>
     <Authors>Sean K. Sullivan</Authors>
     <Description>.NetCore 2.0 library providing easy communications with local Wemo devices.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+    <PackageReleaseNotes>.Net Standard Release</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) MIT License. All rights reserved.</Copyright>
     <PackageTags>wemo smartplug wemo.net</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.1</Version>
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
-    <FileVersion>1.2.0.0</FileVersion>
+    <Version>1.3.0</Version>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <FileVersion>1.3.0.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>WemoNetSafe.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
