@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using WemoNet.Communications;
@@ -32,7 +34,7 @@ namespace WemoNet
         /// <returns></returns>
         internal async Task<WemoResponse> GetWemoPlugResponseAsync(Soap.WemoGetCommands cmd, string ipAddress)
         {
-            var plug = new WemoPlug { WebRequest = GetResponseWebRequest };
+            var plug = new WemoPlug { GetResponseWebRequest = GetResponseWebRequest };
             var response = await plug.GetResponseAsync(cmd, ipAddress);
             return response;
         }
@@ -44,9 +46,31 @@ namespace WemoNet
         /// <param name="cmd"></param>
         /// <param name="ipAddress"></param>
         /// <returns></returns>
-        internal async Task<T> GetWemoResponseObjectAsync<T>(Soap.WemoGetCommands cmd, string ipAddress)
+        internal async Task<T> GetWemoResponseObjectAsync<T>(string ipAddress)
         {
-            var plug = new WemoPlug { WebRequest = GetResponseWebRequest };
+            Soap.WemoGetCommands cmd = Soap.WemoGetCommands.Null;
+
+            var obj = typeof(T);
+
+            // Determine which command to use, per object
+            if (obj == typeof(GetBinaryStateResponse))
+            {
+                cmd = Soap.WemoGetCommands.GetBinaryState;
+            }
+
+            if (obj == typeof(GetFriendlyNameResponse))
+            {
+                cmd = Soap.WemoGetCommands.GetFriendlyName;
+            }
+
+            if (obj == typeof(GetHomeInfoResponse))
+            {
+                cmd = Soap.WemoGetCommands.GetHomeInfo;
+            }
+
+            if (cmd == Soap.WemoGetCommands.Null) throw new System.Exception($"Object not supported: {obj.ToString()}");
+
+            var plug = new WemoPlug { GetResponseWebRequest = GetResponseWebRequest };
 
             var response = await plug.GetResponseAsync(cmd, ipAddress);
             var objResponse = plug.GetResponseObject<T>(response);
@@ -55,7 +79,7 @@ namespace WemoNet
 
         internal async Task<string> GetWemoResponseValueAsync(Soap.WemoGetCommands cmd, string ipAddress)
         {
-            var plug = new WemoPlug { WebRequest = GetResponseWebRequest };
+            var plug = new WemoPlug { GetResponseWebRequest = GetResponseWebRequest };
 
             var response = await plug.GetResponseAsync(cmd, ipAddress);
             var value = plug.GetResponseValue(response);
@@ -69,7 +93,7 @@ namespace WemoNet
         /// <returns></returns>
         public async Task<bool> ToggleWemoPlugAsync(string ipAddress)
         {
-            var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(Soap.WemoGetCommands.GetBinaryState, ipAddress);
+            var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(ipAddress);
 
             var binaryStateValue = false;
             switch (existingState.BinaryState)
@@ -82,7 +106,7 @@ namespace WemoNet
                     binaryStateValue = false;
                     break;
             }
-            var plug = new WemoPlug { WebRequest = SetResponseWebRequest };
+            var plug = new WemoPlug { SetResponseWebRequest = SetResponseWebRequest };
             var response = await plug.SetBinaryStateAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress, binaryStateValue);
             return response;
         }
@@ -110,6 +134,19 @@ namespace WemoNet
         }
 
         /// <summary>
+        /// Get a list of Wemo devices that exist within a local network.
+        /// This process may take 2 or more mintues to complete!
+        /// </summary>
+        /// <param name="ipAddressSeed">The first 3 sections of an IP address. Example: 192.168.1</param>
+        /// <returns>A thread-safe ConcurrentDictionary collection of IpAddress/FriendlyName pairs.</returns>
+        public ConcurrentDictionary<string, string> GetListOfLocalWemoDevices(string ipAddressSeed)
+        {
+            var plug = new WemoPlug { SetResponseWebRequest = SetResponseWebRequest };
+            var response = plug.GetListOfLocalWemoDevices(ipAddressSeed);
+            return response;
+        }
+
+        /// <summary>
         /// Enable or disable (turn on or off) the target Wemo plug.
         /// </summary>
         /// <param name="ipAddress"></param>
@@ -119,9 +156,9 @@ namespace WemoNet
         {
             bool success = true;
 
-            var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(Soap.WemoGetCommands.GetBinaryState, ipAddress);
+            var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(ipAddress);
 
-            var plug = new WemoPlug { WebRequest = SetResponseWebRequest };
+            var plug = new WemoPlug { SetResponseWebRequest = SetResponseWebRequest };
             if (on && existingState.BinaryState == "0")
             {
                 success = await plug.SetBinaryStateAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress, true);

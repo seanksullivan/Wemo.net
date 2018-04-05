@@ -61,6 +61,7 @@ namespace WemoNet.Utilities
 
         public enum WemoGetCommands
         {
+            Null,
             GetSignalStrength,
             GetFriendlyName,
             GetBinaryState,

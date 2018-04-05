@@ -10,6 +10,26 @@ namespace WemoNet.IntegrationTests
     public class WemoNetTests
     {
         [TestMethod]
+        public void GetListOfLocalWemoDevices_Verify()
+        {
+            // ARRANGE
+            var ipAddressSeed = "http://192.168.1";
+            var wemo = new Wemo();
+
+            // ACT
+            var listOfDevicesFound = wemo.GetListOfLocalWemoDevices(ipAddressSeed);
+
+            // ASSERT
+            Assert.IsTrue(listOfDevicesFound.Count > 0, 
+                $"Expected to locate at least one Wemo device - but nothing located with the supplied IpAddress seed of {ipAddressSeed}");
+
+            foreach (var device in listOfDevicesFound)
+            {
+                Console.WriteLine($"IpAddress: {device.Key}, Name: {device.Value}");
+            }   
+        }
+
+        [TestMethod]
         public void GetResponse_Verify()
         {
             // ARRANGE
@@ -17,10 +37,24 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetWatchdogFile, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetHomeId, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsTrue(result.StatusCode == "OK", "Expected Http StatusCode not returned");
+        }
+
+        [TestMethod]
+        public async Task VerifyWemoDeviceExists()
+        {
+            // ARRANGE
+            var ipAddress = "http://192.168.1.5";
+            var wemo = new Wemo();
+
+            // ACT
+            var result = await wemo.GetWemoResponseObjectAsync<GetBinaryStateResponse>(ipAddress);
+
+            // ASSERT
+            Assert.IsTrue((result.BinaryState == "0" || result.BinaryState == "1"), "Expected Http StatusCode not returned");
         }
 
         [TestMethod]
@@ -31,10 +65,10 @@ namespace WemoNet.IntegrationTests
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetWemoResponseObjectAsync<GetHomeInfoResponse>(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.GetWemoResponseObjectAsync<GetFriendlyNameResponse>(ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
-            Assert.IsNotNull(result.HomeInfo, "The expected type was not returned");
+            Assert.IsNotNull(result.FriendlyName, "The expected type was not returned");
         }
 
         [TestMethod]
