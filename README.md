@@ -15,15 +15,15 @@ var wemo = new Wemo();
 
 #### Turn-on a Wemo Plug
 ```csharp
-wemo.TurnOnWemoPlugAsync("http://192.168.1.5");
+wemo.TurnOnWemoPlugAsync("http://192.168.1.5").GetAwaiter().GetResult();
 ```
 #### Turn-off a Wemo Plug
 ```csharp
-wemo.TurnOffWemoPlugAsync("http://192.168.1.5");
+wemo.TurnOffWemoPlugAsync("http://192.168.1.5").GetAwaiter().GetResult();
 ```
 #### Toggle on/off a Wemo Plug
 ```csharp
-wemo.ToggleWemoPlugAsync("http://192.168.1.5");
+wemo.ToggleWemoPlugAsync("http://192.168.1.5").GetAwaiter().GetResult();
 ```
 
 #### Verify communications example
