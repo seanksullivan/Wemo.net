@@ -13,9 +13,9 @@
     <Copyright>Copyright 2017 (c) MIT License. All rights reserved.</Copyright>
     <PackageTags>wemo smartplug wemo.net</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.3.0</Version>
-    <AssemblyVersion>1.3.0.0</AssemblyVersion>
-    <FileVersion>1.3.0.0</FileVersion>
+    <Version>1.3.1</Version>
+    <AssemblyVersion>1.3.1.0</AssemblyVersion>
+    <FileVersion>1.3.1.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>WemoNetSafe.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>

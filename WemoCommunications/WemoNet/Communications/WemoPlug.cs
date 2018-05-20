@@ -106,20 +106,37 @@ namespace WemoNet.Communications
             var concurrencyLevel = numProcs * 2;
             var wemoDevices = new ConcurrentDictionary<string, string>(concurrencyLevel, 300);
 
-            Parallel.For(1, 255,
-            async seed =>
+            Parallel.For(5, 255,
+            seed =>
             {
                 // Set the Ip Address
                 var ipAddress = $"{ipAddressSeed}.{seed}";
 
                 // Attempt to communicate with the Wemo device at the set Ip Address
-                var response = await GetResponseAsync(Soap.WemoGetCommands.GetFriendlyName, ipAddress);
+                // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object - which is probably a Mock
+                var request = GetResponseWebRequest
+                    ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}", 
+                    ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
 
-                // If the Ip Address is truly a Wemo device, then deserialize and add it to the list
-                if (response.StatusCode != "UnknownError")
+                // Construct the Soap Request
+                var reqContentSoap = Soap.GenerateGetRequest(Soap.WemoGetCommands.GetFriendlyName);
+                var validWemoDevice = VerifyWemoDevice(request, reqContentSoap);
+
+                if (validWemoDevice)
                 {
-                    var friendly = GetResponseObject<GetFriendlyNameResponse>(response);
-                    wemoDevices.TryAdd(ipAddress, friendly.FriendlyName);
+                    var newRequest = GetResponseWebRequest
+                        ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
+                        ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
+
+                    // Construct the Soap Request
+                    var response = ExecuteGetResponseAsync(newRequest, reqContentSoap).GetAwaiter().GetResult();
+
+                    // If the Ip Address is truly a Wemo device, then deserialize and add it to the list
+                    if (response.StatusCode != "UnknownError")
+                    {
+                        var friendly = GetResponseObject<GetFriendlyNameResponse>(response);
+                        wemoDevices.TryAdd(ipAddress, friendly.FriendlyName);
+                    }
                 }
             });
 
@@ -130,20 +147,17 @@ namespace WemoNet.Communications
         private static async Task<WemoResponse> ExecuteGetResponseAsync(HttpWebRequest request, string reqContentSoap)
         {
             WemoResponse response;
-
-            // Write the Soap Request to the Request Stream
-            using (var requestStream = await request.GetRequestStreamAsync())
-            {
-                var encoding = new UTF8Encoding();
-                requestStream.Write(encoding.GetBytes(reqContentSoap), 0, encoding.GetByteCount(reqContentSoap));
-            }
-
-            // Send the Request and acquire the Response
             try
             {
-                var httpResponse = await request.GetResponseAsync() as HttpWebResponse;
-                using (var rspStm = httpResponse.GetResponseStream())
+                // Write the Soap Request to the Request Stream
+                using (var requestStream = await request.GetRequestStreamAsync())
                 {
+                    var encoding = new UTF8Encoding();
+                    requestStream.Write(encoding.GetBytes(reqContentSoap), 0, encoding.GetByteCount(reqContentSoap));
+
+                    // Send the Request and acquire the Response
+                    using (var httpResponse = await request.GetResponseAsync() as HttpWebResponse)
+                    using (var rspStm = httpResponse.GetResponseStream())
                     using (var reader = new StreamReader(rspStm))
                     {
                         // Translate the Http Response to our own Response object
@@ -164,6 +178,38 @@ namespace WemoNet.Communications
                     StatusCode = ex.Status.ToString(),
                     ResponseBody = string.Empty
                 };
+            }
+
+            return response;
+        }
+
+        private static bool VerifyWemoDevice(HttpWebRequest request, string reqContentSoap)
+        {
+            var response = false;
+            try
+            {
+                // Write the Soap Request to the Request Stream
+                using (var requestStream = request.GetRequestStream())
+                {
+                    var encoding = new UTF8Encoding();
+                    requestStream.Write(encoding.GetBytes(reqContentSoap), 0, encoding.GetByteCount(reqContentSoap));
+
+                    // Send the Request and acquire the Response
+                    using (var httpResponse = request.GetResponse() as HttpWebResponse)
+                    {
+                        var headers = httpResponse.Headers;
+                        var headerValues = headers.GetValues("X-User-Agent").ToList();
+
+                        if (headerValues.Exists(x => x.Contains("redsonic")))
+                        {
+                            response = true;
+                        }
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                response = false;
             }
 
             return response;
