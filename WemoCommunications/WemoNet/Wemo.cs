@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -137,7 +138,7 @@ namespace WemoNet
         /// Get a list of Wemo devices that exist within a local network.
         /// This process may take 2 or more minutes to complete!
         /// </summary>
-        /// <param name="ipAddressSeed">The first 3 sections of an IP address. Example: 192.168.1</param>
+        /// <param name="ipAddressSeed">The first 3 sections of an IP address. Example: http://192.168.1</param>
         /// <returns>A thread-safe ConcurrentDictionary collection of IpAddress/FriendlyName pairs.</returns>
         public ConcurrentDictionary<string, string> GetListOfLocalWemoDevices(string ipAddressSeed)
         {

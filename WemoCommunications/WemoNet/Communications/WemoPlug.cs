@@ -100,8 +100,19 @@ namespace WemoNet.Communications
             return success;
         }
 
+
+        /// <summary>
+        /// Searches from an IP range. e.g. http://192.168.1, from http://x.x.x.1 through http://x.x.x.255, attempting to locate Wemo devices.
+        /// </summary>
+        /// <param name="ipAddressSeed">http://192.168.1</param>
+        /// <returns></returns>
         public ConcurrentDictionary<string, string> GetListOfLocalWemoDevices(string ipAddressSeed)
         {
+            if (string.IsNullOrWhiteSpace(ipAddressSeed))
+            {
+                throw new Exception("The ipAddressSeed value is required!");
+            }
+
             var numProcs = Environment.ProcessorCount;
             var concurrencyLevel = numProcs * 2;
             var wemoDevices = new ConcurrentDictionary<string, string>(concurrencyLevel, 300);
@@ -111,6 +122,12 @@ namespace WemoNet.Communications
             {
                 // Set the Ip Address
                 var ipAddress = $"{ipAddressSeed}.{seed}";
+
+                // Verify the IP address is valid
+                var validIpAddress = IPAddress.TryParse(ipAddress.Replace("http://", ""), out IPAddress address);
+
+                // if the Ip address is not valid, then skip and get outta here...
+                if (!validIpAddress) return;
 
                 // Attempt to communicate with the Wemo device at the set Ip Address
                 // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object - which is probably a Mock
@@ -122,21 +139,21 @@ namespace WemoNet.Communications
                 var reqContentSoap = Soap.GenerateGetRequest(Soap.WemoGetCommands.GetFriendlyName);
                 var validWemoDevice = VerifyWemoDevice(request, reqContentSoap);
 
-                if (validWemoDevice)
+                // If we are not an actual Wemo device, then skip and get outta here...
+                if (!validWemoDevice) return;
+
+                var newRequest = GetResponseWebRequest
+                    ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
+                    ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
+
+                // Construct the Soap Request
+                var response = ExecuteGetResponseAsync(newRequest, reqContentSoap).GetAwaiter().GetResult();
+
+                // If the Ip Address is truly a Wemo device, then deserialize and add it to the list
+                if (response.StatusCode != "UnknownError")
                 {
-                    var newRequest = GetResponseWebRequest
-                        ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
-                        ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
-
-                    // Construct the Soap Request
-                    var response = ExecuteGetResponseAsync(newRequest, reqContentSoap).GetAwaiter().GetResult();
-
-                    // If the Ip Address is truly a Wemo device, then deserialize and add it to the list
-                    if (response.StatusCode != "UnknownError")
-                    {
-                        var friendly = GetResponseObject<GetFriendlyNameResponse>(response);
-                        wemoDevices.TryAdd(ipAddress, friendly.FriendlyName);
-                    }
+                    var friendly = GetResponseObject<GetFriendlyNameResponse>(response);
+                    wemoDevices.TryAdd(ipAddress, friendly.FriendlyName);
                 }
             });
 

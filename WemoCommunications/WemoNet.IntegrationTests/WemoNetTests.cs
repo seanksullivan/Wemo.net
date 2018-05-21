@@ -13,7 +13,7 @@ namespace WemoNet.IntegrationTests
         public void GetListOfLocalWemoDevices_Verify()
         {
             // ARRANGE
-            var ipAddressSeed = "http://192.168.1";
+            var ipAddressSeed = "192.168.1";
             var wemo = new Wemo();
 
             // ACT
