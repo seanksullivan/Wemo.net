@@ -117,7 +117,7 @@ namespace WemoNet.Communications
             var concurrencyLevel = numProcs * 2;
             var wemoDevices = new ConcurrentDictionary<string, string>(concurrencyLevel, 300);
 
-            Parallel.For(5, 255,
+            Parallel.For(1, 255,
             seed =>
             {
                 // Set the Ip Address
