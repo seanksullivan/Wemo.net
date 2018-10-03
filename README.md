@@ -1,3 +1,5 @@
+[![Build Status](https://sullivan.visualstudio.com/Widget/_apis/build/status/seanksullivan.Wemo.net)](https://sullivan.visualstudio.com/Widget/_build/latest?definitionId=5)
+
 # Wemo.net
 .Net Standard 2.0 (C#) library providing easy, multi-platform communications with Wemo devices.
 
