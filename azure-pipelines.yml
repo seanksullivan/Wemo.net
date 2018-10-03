@@ -24,12 +24,12 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+#- task: VSTest@2
+#  inputs:
+#    platform: '$(buildPlatform)'
+#    configuration: '$(buildConfiguration)'
     
-- script: dotnet test WemoNet.UnitTests.csproj --logger trx
+- script: dotnet test WemoNet.UnitTests --logger trx
 - task: PublishTestResults@2
   inputs:
     testRunner: VSTest
