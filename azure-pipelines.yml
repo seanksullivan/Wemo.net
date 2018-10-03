@@ -28,9 +28,16 @@ steps:
 #  inputs:
 #    platform: '$(buildPlatform)'
 #    configuration: '$(buildConfiguration)'
-    
-- script: dotnet test WemoNet.UnitTests --logger trx
-- task: PublishTestResults@2
+
+- task: DotNetCoreCLI@2
   inputs:
-    testRunner: VSTest
-    testResultsFiles: '**/*.trx'
+    command: test
+    projects: '**/*UnitTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- script: dotnet test ~/WemoNet.UnitTests/WemoNet.UnitTests.csproj --logger trx
+
+#- task: PublishTestResults@2
+#  inputs:
+#    testRunner: VSTest
+#    testResultsFiles: '**/*.trx'
