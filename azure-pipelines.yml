@@ -25,11 +25,10 @@ steps:
     projects: '**/*UnitTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
+- task: PublishBuildArtifacts@1
   inputs:
-    command: 'publish'
-    publishWebProjects: false
-    feedsToUse: 'select'
-    versioningScheme: 'off'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 
 
