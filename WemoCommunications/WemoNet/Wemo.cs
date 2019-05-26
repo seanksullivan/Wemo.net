@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -140,10 +138,10 @@ namespace WemoNet
         /// </summary>
         /// <param name="ipAddressSeed">The first 3 sections of an IP address, including 'http://'. Example: 'http://192.168.1'</param>
         /// <returns>A thread-safe ConcurrentDictionary collection of IpAddress/FriendlyName pairs.</returns>
-        public ConcurrentDictionary<string, string> GetListOfLocalWemoDevices(string ipAddressSeed)
+        public async Task<ConcurrentDictionary<string, string>> GetListOfLocalWemoDevicesAsync(string ipAddressSeed)
         {
             var plug = new WemoPlug { SetResponseWebRequest = SetResponseWebRequest };
-            var response = plug.GetListOfLocalWemoDevices(ipAddressSeed);
+            var response = await plug.GetListOfLocalWemoDevicesAsync(ipAddressSeed);
             return response;
         }
 

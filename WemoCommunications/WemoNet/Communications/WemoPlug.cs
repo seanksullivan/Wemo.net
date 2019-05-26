@@ -1,15 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WemoNet.Responses;
 using WemoNet.Utilities;
-using System.Net.NetworkInformation;
 using System.Collections.Concurrent;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace WemoNet.Communications
 
@@ -106,7 +106,7 @@ namespace WemoNet.Communications
         /// </summary>
         /// <param name="ipAddressSeed">http://192.168.1</param>
         /// <returns></returns>
-        public ConcurrentDictionary<string, string> GetListOfLocalWemoDevices(string ipAddressSeed)
+        public async Task<ConcurrentDictionary<string, string>> GetListOfLocalWemoDevicesAsync(string ipAddressSeed)
         {
             if (string.IsNullOrWhiteSpace(ipAddressSeed))
             {
@@ -117,44 +117,47 @@ namespace WemoNet.Communications
             var concurrencyLevel = numProcs * 2;
             var wemoDevices = new ConcurrentDictionary<string, string>(concurrencyLevel, 300);
 
-            Parallel.For(1, 255,
-            seed =>
+            await Task.Run(() =>
             {
-                // Set the Ip Address
-                var ipAddress = $"{ipAddressSeed}.{seed}";
-
-                // Verify the IP address is valid
-                var validIpAddress = IPAddress.TryParse(ipAddress.Replace("http://", ""), out IPAddress address);
-
-                // if the Ip address is not valid, then skip and get outta here...
-                if (!validIpAddress) return;
-
-                // Attempt to communicate with the Wemo device at the set Ip Address
-                // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object - which is probably a Mock
-                var request = GetResponseWebRequest
-                    ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}", 
-                    ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
-
-                // Construct the Soap Request
-                var reqContentSoap = Soap.GenerateGetRequest(Soap.WemoGetCommands.GetFriendlyName);
-                var validWemoDevice = VerifyWemoDevice(request, reqContentSoap);
-
-                // If we are not an actual Wemo device, then skip and get outta here...
-                if (!validWemoDevice) return;
-
-                var newRequest = GetResponseWebRequest
-                    ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
-                    ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
-
-                // Construct the Soap Request
-                var response = ExecuteGetResponseAsync(newRequest, reqContentSoap).GetAwaiter().GetResult();
-
-                // If the Ip Address is truly a Wemo device, then deserialize and add it to the list
-                if (response.StatusCode != "UnknownError")
+                Parallel.For(1, 255,
+                async seed =>
                 {
-                    var friendly = GetResponseObject<GetFriendlyNameResponse>(response);
-                    wemoDevices.TryAdd(ipAddress, friendly.FriendlyName);
-                }
+                    // Set the Ip Address
+                    var ipAddress = $"{ipAddressSeed}.{seed}";
+
+                    // Verify the IP address is valid
+                    var validIpAddress = IPAddress.TryParse(ipAddress.Replace("http://", ""), out IPAddress address);
+
+                    // if the Ip address is not valid, then skip and get outta here...
+                    if (!validIpAddress) return;
+
+                    // Attempt to communicate with the Wemo device at the set Ip Address
+                    // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object - which is probably a Mock
+                    var request = GetResponseWebRequest
+                        ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
+                        ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
+
+                    // Construct the Soap Request
+                    var reqContentSoap = Soap.GenerateGetRequest(Soap.WemoGetCommands.GetFriendlyName);
+                    var validWemoDevice = VerifyWemoDevice(request, reqContentSoap);
+
+                    // If we are not an actual Wemo device, then skip and get outta here...
+                    if (!validWemoDevice) return;
+
+                    var newRequest = GetResponseWebRequest
+                        ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
+                        ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
+
+                    // Construct the Soap Request
+                    var response = await ExecuteGetResponseAsync(newRequest, reqContentSoap);
+
+                    // If the Ip Address is truly a Wemo device, then deserialize and add it to the list
+                    if (response.StatusCode != "UnknownError")
+                    {
+                        var friendly = GetResponseObject<GetFriendlyNameResponse>(response);
+                        wemoDevices.TryAdd(ipAddress, friendly.FriendlyName);
+                    }
+                });
             });
 
             return wemoDevices;
@@ -242,6 +245,27 @@ namespace WemoNet.Communications
             return response;
         }
 
+        private async Task<string> InvokeRestAsync(string baseAddress, string url)
+        {
+            var result = string.Empty;
+            var client = new HttpClient();
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("HOST", baseAddress);
+
+            HttpResponseMessage response = await client.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                result = await response.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                result = response.StatusCode.ToString();
+            }
+
+            return result;
+        }
         #endregion
     }
 }

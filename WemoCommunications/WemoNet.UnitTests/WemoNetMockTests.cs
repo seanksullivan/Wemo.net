@@ -1,10 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Moq.Protected;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -181,6 +184,21 @@ namespace WemoNet.UnitTests
 
             request.Setup(s => s.GetResponseAsync()).ReturnsAsync(response.Object);
             return request.Object;
+        }
+
+        private static HttpClient CreateMockHttpClient(string responseMessage)
+        {
+            var mockMessageHandler = new Mock<HttpMessageHandler>();
+            mockMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(responseMessage)
+                });
+
+
+            return new HttpClient(mockMessageHandler.Object);
         }
 
         /// <summary>

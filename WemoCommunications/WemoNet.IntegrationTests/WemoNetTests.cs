@@ -10,14 +10,14 @@ namespace WemoNet.IntegrationTests
     public class WemoNetTests
     {
         [TestMethod]
-        public void GetListOfLocalWemoDevices_Verify()
+        public async Task GetListOfLocalWemoDevices_Verify()
         {
             // ARRANGE
-            var ipAddressSeed = "http://192.168.1";
+            var ipAddressSeed = "http://192.168.86";
             var wemo = new Wemo();
 
             // ACT
-            var listOfDevicesFound = wemo.GetListOfLocalWemoDevices(ipAddressSeed);
+            var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(ipAddressSeed);
 
             // ASSERT
             Assert.IsTrue(listOfDevicesFound.Count > 0, 
@@ -92,7 +92,7 @@ namespace WemoNet.IntegrationTests
         public async Task TurnOnWemoPlug_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.5";
+            var ipAddress = "http://192.168.86.36";
             var wemo = new Wemo();
 
             // ACT
@@ -106,7 +106,7 @@ namespace WemoNet.IntegrationTests
         public async Task TurnOffWemoPlug_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.5";
+            var ipAddress = "http://192.168.86.36";
             var wemo = new Wemo();
 
             // ACT
