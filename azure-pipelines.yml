@@ -1,8 +1,3 @@
-# .NET Desktop
-# Build and run tests for .NET Desktop or Windows classic desktop solutions.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
-
 pool:
   vmImage: 'VS2017-Win2016'
 
@@ -18,11 +13,33 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
+# Build .Net Framework Console test-app
+- task: MSBuild@1
   inputs:
-    solution: '$(solution)'
+    solution: '**/*DotNetFrameworkConsole/*.csproj'
     platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    configuration: '$buildConfiguration)'
+
+# Build .Net Core Console test-app
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*DotNetCoreConsole/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+# Build .Net Standard 2.0 IntegrationTests
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*IntegrationTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+# Build .Net Standard 2.0 UnitTests
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*UnitTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
 # Execute .NetCore 2.0 UnitTests
 - task: DotNetCoreCLI@2
