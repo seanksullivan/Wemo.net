@@ -9,15 +9,22 @@ namespace WemoNet.IntegrationTests
     [TestClass]
     public class WemoNetTests
     {
+        /// <summary>
+        /// This Test will run for 2-3 minutes; it is scanning 1 - 255 of the 4th ip address octet, and this is slow, even runing as a Parallel task.
+        /// </summary>
+        /// <returns></returns>
         [TestMethod]
         public async Task GetListOfLocalWemoDevices_Verify()
         {
             // ARRANGE
-            var ipAddressSeed = "http://192.168.86";
+            var octetOne = 192;
+            var octetTwo = 168;
+            var octetThree = 86;
+            var ipAddressSeed = $"http://{octetOne}.{octetTwo}.{octetThree}";
             var wemo = new Wemo();
 
             // ACT
-            var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(ipAddressSeed);
+            var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(octetOne, octetTwo, octetThree);
 
             // ASSERT
             Assert.IsTrue(listOfDevicesFound.Count > 0, 
@@ -107,7 +114,10 @@ namespace WemoNet.IntegrationTests
         {
             // ARRANGE
             var ipAddress = "http://192.168.86.36";
-            var wemo = new Wemo();
+            var wemo = new Wemo
+            {
+                PortNumber = 12345
+            };
 
             // ACT
             var result = await wemo.TurnOffWemoPlugAsync(ipAddress);

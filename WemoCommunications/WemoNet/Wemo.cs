@@ -23,6 +23,12 @@ namespace WemoNet
         /// TEST USAGE - specifically to provide a cheap-n-easy way to provide a Mock object
         /// </summary>
         internal HttpWebRequest SetResponseWebRequest { get; set; }
+
+        /// <summary>
+        /// This property allows targeting a custom port number for your Wemo devices.  Although, the default port for all Wemo devices is 49153.
+        /// If this property is not set then the default Wemo port value will be utilized.
+        /// </summary>
+        public int PortNumber { get; set; }
         #endregion
 
         /// <summary>
@@ -33,7 +39,7 @@ namespace WemoNet
         /// <returns></returns>
         internal async Task<WemoResponse> GetWemoPlugResponseAsync(Soap.WemoGetCommands cmd, string ipAddress)
         {
-            var plug = new WemoPlug { GetResponseWebRequest = GetResponseWebRequest };
+            var plug = new WemoPlug(PortNumber) { GetResponseWebRequest = GetResponseWebRequest};
             var response = await plug.GetResponseAsync(cmd, ipAddress);
             return response;
         }
@@ -69,7 +75,7 @@ namespace WemoNet
 
             if (cmd == Soap.WemoGetCommands.Null) throw new System.Exception($"Object not supported: {obj.ToString()}");
 
-            var plug = new WemoPlug { GetResponseWebRequest = GetResponseWebRequest };
+            var plug = new WemoPlug(PortNumber) { GetResponseWebRequest = GetResponseWebRequest};
 
             var response = await plug.GetResponseAsync(cmd, ipAddress);
             var objResponse = plug.GetResponseObject<T>(response);
@@ -78,7 +84,7 @@ namespace WemoNet
 
         internal async Task<string> GetWemoResponseValueAsync(Soap.WemoGetCommands cmd, string ipAddress)
         {
-            var plug = new WemoPlug { GetResponseWebRequest = GetResponseWebRequest };
+            var plug = new WemoPlug(PortNumber) { GetResponseWebRequest = GetResponseWebRequest};
 
             var response = await plug.GetResponseAsync(cmd, ipAddress);
             var value = plug.GetResponseValue(response);
@@ -105,7 +111,7 @@ namespace WemoNet
                     binaryStateValue = false;
                     break;
             }
-            var plug = new WemoPlug { SetResponseWebRequest = SetResponseWebRequest };
+            var plug = new WemoPlug(PortNumber) { SetResponseWebRequest = SetResponseWebRequest};
             var response = await plug.SetBinaryStateAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress, binaryStateValue);
             return response;
         }
@@ -136,11 +142,15 @@ namespace WemoNet
         /// Get a list of Wemo devices that exist within a local network.
         /// This process may take 2 or more minutes to complete!
         /// </summary>
-        /// <param name="ipAddressSeed">The first 3 sections of an IP address, including 'http://'. Example: 'http://192.168.1'</param>
+        /// <param name="octetOne">The first octet of an IP address, e.g. 192 - from an Ip adress of: http://192.168.86.1</param>
+        /// <param name="octetTwo">The second octet of an IP address, e.g. 168 - from an Ip adress of: http://192.168.86.1</param>
+        /// <param name="octetThree">The third octet of an IP address, e.g. 86 - from an Ip adress of: http://192.168.86.1</param>
         /// <returns>A thread-safe ConcurrentDictionary collection of IpAddress/FriendlyName pairs.</returns>
-        public async Task<ConcurrentDictionary<string, string>> GetListOfLocalWemoDevicesAsync(string ipAddressSeed)
+        public async Task<ConcurrentDictionary<string, string>> GetListOfLocalWemoDevicesAsync(int octetOne, int octetTwo, int octetThree)
         {
-            var plug = new WemoPlug { SetResponseWebRequest = SetResponseWebRequest };
+            var ipAddressSeed = $"http://{octetOne}.{octetTwo}.{octetThree}";
+
+            var plug = new WemoPlug(PortNumber) { SetResponseWebRequest = SetResponseWebRequest};
             var response = await plug.GetListOfLocalWemoDevicesAsync(ipAddressSeed);
             return response;
         }
@@ -157,7 +167,7 @@ namespace WemoNet
 
             var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(ipAddress);
 
-            var plug = new WemoPlug { SetResponseWebRequest = SetResponseWebRequest };
+            var plug = new WemoPlug(PortNumber) { SetResponseWebRequest = SetResponseWebRequest};
             if (on && existingState.BinaryState == "0")
             {
                 success = await plug.SetBinaryStateAsync(Soap.WemoSetBinaryStateCommands.BinaryState, ipAddress, true);

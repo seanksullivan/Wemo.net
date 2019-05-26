@@ -156,6 +156,40 @@ namespace WemoNet.UnitTests
             Assert.IsTrue(result, "WemoPlug not toggled");
         }
 
+        [TestMethod]
+        [DeploymentItem("TestData")]
+        public async Task ToggleWemoPlugAsync_CustomPort_VerifyAsync()
+        {
+            // ARRANGE
+            var ipAddress = "http://192.168.1.44444";
+            // Acquire the soap/Xml data that we wish to supply within our mock'd HttpWebRequest and HttpWebResponse
+            // Read Text directly instead of Bytes - so that our Xml comparison is easier (aka, BOM)
+            var getBinaryStateResponseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\GetBinaryStateResponse.xml"));
+
+            // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
+            var mockGetResponseWebRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", getBinaryStateResponseBytes);
+
+            var setBinaryStateResponseBytes = Encoding.UTF8.GetBytes(File.ReadAllText("TestData\\SetBinaryStateResponse.xml"));
+
+            // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
+            var setWebRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", setBinaryStateResponseBytes);
+
+            var wemo = new Wemo
+            {
+                // Minimal inversion of control:
+                // Set the WebRequest properties to provide our own Mock'd HttpWebRequest/Response
+                GetResponseWebRequest = mockGetResponseWebRequest,
+                SetResponseWebRequest = setWebRequest,
+                PortNumber = 12345
+            };
+
+            // ACT
+            var result = await wemo.ToggleWemoPlugAsync(ipAddress);
+
+            // ASSERT
+            Assert.IsTrue(result, "WemoPlug not toggled");
+        }
+
         private static HttpWebRequest CreateMockHttpWebRequest(HttpStatusCode httpStatusCode, string statusDescription, byte[] responseBytes)
         {
             var requestBytes = Encoding.ASCII.GetBytes("Blah Blah Blah");

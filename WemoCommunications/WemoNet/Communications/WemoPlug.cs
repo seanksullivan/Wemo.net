@@ -24,10 +24,26 @@ namespace WemoNet.Communications
         public string SoapAction { get; set; } = "SOAPACTION:\"urn:Belkin:service:basicevent:1#";
         public string Event { get; set; } = "/upnp/control/basicevent1";
         public string RequestMethod { get; set; } = "POST";
-        public string Port { get; set; } = "49153";
+        public int Port { get; set; } = 49153;
         internal HttpWebRequest GetResponseWebRequest { get; set; }
         internal HttpWebRequest SetResponseWebRequest { get; set; }
         #endregion
+
+        /// <summary>
+        /// Default Ctor
+        /// </summary>
+        public WemoPlug()
+        {
+
+        }
+
+        public WemoPlug(int port)
+        {
+            if (port != 0)
+            {
+                Port = port;
+            }
+        }
 
         public async Task<WemoResponse> GetResponseAsync(Soap.WemoGetCommands cmd, string ipAddress)
         {
