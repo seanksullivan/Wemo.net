@@ -25,11 +25,11 @@ steps:
     projects: '**/*UnitTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-- task: DownloadBuildArtifacts@0
+- task: DotNetCoreCLI@2
   inputs:
-    buildType: 'current'
-    downloadType: 'single'
-    artifactName: 'Wemo.net'
-    downloadPath: '$(System.ArtifactsDirectory)'
+    command: 'publish'
+    publishWebProjects: true
+    feedsToUse: 'select'
+    versioningScheme: 'off'
 
 
