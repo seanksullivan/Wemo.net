@@ -18,5 +18,18 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# Execute .NetCore 2.0 UnitTests
+- task: DotNetCoreCLI@2
+  inputs:
+    command: test
+    projects: '**/*UnitTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DownloadBuildArtifacts@0
+  inputs:
+    buildType: 'current'
+    downloadType: 'single'
+    artifactName: 'Wemo.net'
+    downloadPath: '$(System.ArtifactsDirectory)'
 
 
