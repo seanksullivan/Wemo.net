@@ -9,7 +9,7 @@
     <Authors>Sean K. Sullivan</Authors>
     <Description>.Net Standard 2.0 library providing easy, multi-platform communications with local Wemo devices.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Added ability to use a non-default Port value form Wemo communications.  Added ability to search for all Wemo devices within a local network via var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(192, 168, 10); // The first 3 IP address octets</PackageReleaseNotes>
+    <PackageReleaseNotes>Added ability to use a non-default Port value for Wemo communications.  Added ability to search for all Wemo devices within a local network via var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(192, 168, 10); // The first 3 IP address octets</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) MIT License. All rights reserved.</Copyright>
     <PackageTags>wemo smartplug wemo.net</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
