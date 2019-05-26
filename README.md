@@ -39,3 +39,7 @@ var offSuccess = await wemo.TurnOffWemoPlugAsync("http://192.168.1.5");
 var success = wemo.TurnOnWemoPlugAsync("http://192.168.1.5").GetAwaiter().GetResult();
 ```
 
+#### Search for Wemo devices within your local network (caution, this will consume 2-3 minutes)
+```csharp
+var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(192, 168, 10); // First 3 local IP address octets
+```
