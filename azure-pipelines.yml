@@ -18,7 +18,7 @@ steps:
   inputs:
     solution: '**/*DotNetFrameworkConsole/*.csproj'
     platform: '$(buildPlatform)'
-    configuration: '$buildConfiguration)'
+    configuration: '$(buildConfiguration)'
 
 # Build .Net Core Console test-app
 - task: DotNetCoreCLI@2
