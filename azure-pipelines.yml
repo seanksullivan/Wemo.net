@@ -13,38 +13,11 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-# Build .Net Framework Console test-app
-- task: MSBuild@1
+- task: VSBuild@1
   inputs:
-    solution: '**/*DotNetFrameworkConsole/*.csproj'
+    solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# Build .Net Core Console test-app
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*DotNetCoreConsole/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
 
-# Build .Net Standard 2.0 IntegrationTests
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*IntegrationTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-
-# Build .Net Standard 2.0 UnitTests
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*UnitTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-
-# Execute .NetCore 2.0 UnitTests
-- task: DotNetCoreCLI@2
-  inputs:
-    command: test
-    projects: '**/*UnitTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
 
