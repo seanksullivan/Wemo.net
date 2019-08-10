@@ -40,7 +40,7 @@ namespace WemoNet.IntegrationTests
         public void GetResponse_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.5";
+            var ipAddress = "http://192.168.86.37";
             var wemo = new Wemo();
 
             // ACT
@@ -51,10 +51,24 @@ namespace WemoNet.IntegrationTests
         }
 
         [TestMethod]
+        public void GetHomeInfo_Verify()
+        {
+            // ARRANGE
+            var ipAddress = "http://192.168.86.37";
+            var wemo = new Wemo();
+
+            // ACT
+            var result = wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
+
+            // ASSERT
+            Assert.IsTrue(result.StatusCode == "OK", "Expected Http StatusCode not returned");
+        }
+
+        [TestMethod]
         public async Task VerifyWemoDeviceExists()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.5";
+            var ipAddress = "http://192.168.86.36";
             var wemo = new Wemo();
 
             // ACT
@@ -68,7 +82,7 @@ namespace WemoNet.IntegrationTests
         public void GetResponseObject_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.1.5";
+            var ipAddress = "http://192.168.86.36";
             var wemo = new Wemo();
 
             // ACT
@@ -85,7 +99,7 @@ namespace WemoNet.IntegrationTests
             var test = true;
             var wow = Convert.ToInt32(test);
 
-            var ipAddress = "http://192.168.1.5";
+            var ipAddress = "http://192.168.86.36";
             var wemo = new Wemo();
 
             // ACT
@@ -99,7 +113,7 @@ namespace WemoNet.IntegrationTests
         public async Task TurnOnWemoPlug_Verify()
         {
             // ARRANGE
-            var ipAddress = "http://192.168.86.36";
+            var ipAddress = "http://192.168.86.37";
             var wemo = new Wemo();
 
             // ACT
@@ -116,7 +130,7 @@ namespace WemoNet.IntegrationTests
             var ipAddress = "http://192.168.86.36";
             var wemo = new Wemo
             {
-                PortNumber = 12345
+                //PortNumber = 12345
             };
 
             // ACT

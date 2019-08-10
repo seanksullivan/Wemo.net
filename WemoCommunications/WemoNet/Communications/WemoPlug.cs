@@ -19,15 +19,15 @@ namespace WemoNet.Communications
     /// </summary>
     public class WemoPlug
     {
-        #region Public Properties
-        public string ContentType { get; set; } = "text/xml; charset=\"utf-8\"";
-        public string SoapAction { get; set; } = "SOAPACTION:\"urn:Belkin:service:basicevent:1#";
-        public string Event { get; set; } = "/upnp/control/basicevent1";
-        public string RequestMethod { get; set; } = "POST";
-        public int Port { get; set; } = 49153;
-        internal HttpWebRequest GetResponseWebRequest { get; set; }
-        internal HttpWebRequest SetResponseWebRequest { get; set; }
+        #region Internal Properties
+        internal string ContentType { get; set; } = "text/xml; charset=\"utf-8\"";
+        internal string SoapAction { get; set; } = "SOAPACTION:\"urn:Belkin:service:basicevent:1#";
+        internal string Event { get; set; } = "/upnp/control/basicevent1";
+        internal HttpWebRequest Request { get; set; }
+        internal HttpWebRequest BinarySetRequest { get; set; }
         #endregion
+
+        public int Port { get; set; } = 49153;
 
         /// <summary>
         /// Default Ctor
@@ -49,9 +49,8 @@ namespace WemoNet.Communications
         {
             WemoResponse response;
 
-            // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object - which is probably a Mock
-            var request = GetResponseWebRequest
-                ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}", ContentType, SoapAction, cmd, RequestMethod);
+            // Construct the HttpWebRequest
+            var request = CreateHttpWebRequest(cmd, ipAddress);
 
             // Construct the Soap Request
             var reqContentSoap = Soap.GenerateGetRequest(cmd);
@@ -102,9 +101,7 @@ namespace WemoNet.Communications
             bool success = false;
             var target = Convert.ToInt32(targetStatus);
 
-            // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object, else create
-            var request = SetResponseWebRequest
-                ?? HttpRequest.CreateHttpWebRequest($"{ipAddress}:{Port}{Event}", ContentType, SoapAction, "SetBinaryState", RequestMethod);
+            var request = CreateBinaryStateHttpWebRequest(Soap.WemoGetCommands.SetBinaryState, ipAddress);
 
             var response = await GetBinaryStateResponseAsync(cmd.ToString(), request, target.ToString());
             var responsObj = GetResponseObject<SetBinaryStateResponse>(response);
@@ -148,23 +145,19 @@ namespace WemoNet.Communications
                     if (!validIpAddress) return;
 
                     // Attempt to communicate with the Wemo device at the set Ip Address
-                    // Construct the HttpWebRequest - if not null we will use the supplied HttpWebRequest object - which is probably a Mock
-                    var request = GetResponseWebRequest
-                        ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
-                        ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
+                    var request = CreateHttpWebRequest(Soap.WemoGetCommands.GetFriendlyName, ipAddress);
 
                     // Construct the Soap Request
                     var reqContentSoap = Soap.GenerateGetRequest(Soap.WemoGetCommands.GetFriendlyName);
+
+                    // Verify Wemo Device
                     var validWemoDevice = VerifyWemoDevice(request, reqContentSoap);
 
                     // If we are not an actual Wemo device, then skip and get outta here...
                     if (!validWemoDevice) return;
 
-                    var newRequest = GetResponseWebRequest
-                        ?? HttpRequest.CreateGetCommandHttpWebRequest($"{ipAddress}:{Port}{Event}",
-                        ContentType, SoapAction, Soap.WemoGetCommands.GetFriendlyName, RequestMethod);
-
-                    // Construct the Soap Request
+                    // Attempt to communicate with the verified Wemo device - we need to use a new Request object
+                    var newRequest = CreateHttpWebRequest(Soap.WemoGetCommands.GetFriendlyName, ipAddress);
                     var response = await ExecuteGetResponseAsync(newRequest, reqContentSoap);
 
                     // If the Ip Address is truly a Wemo device, then deserialize and add it to the list
@@ -281,6 +274,28 @@ namespace WemoNet.Communications
             }
 
             return result;
+        }
+
+        private HttpWebRequest CreateHttpWebRequest(Soap.WemoGetCommands cmd, string ipAddress)
+        {
+            var fullIpAddress = $"{ipAddress}:{Port}{Event}";
+
+            HttpWebRequest request = Request;
+            if (request == null)
+            {
+                request = HttpRequest.CreateHttpWebRequest(fullIpAddress, ContentType, SoapAction, cmd.ToString(), "POST");
+            }
+            return request;
+        }
+
+        private HttpWebRequest CreateBinaryStateHttpWebRequest(Soap.WemoGetCommands cmd, string ipAddress)
+        {
+            HttpWebRequest request = BinarySetRequest;
+            if (request == null)
+            {
+                request = CreateHttpWebRequest(cmd, ipAddress);
+            }
+            return request;
         }
         #endregion
     }

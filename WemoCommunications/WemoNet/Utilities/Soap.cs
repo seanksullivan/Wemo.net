@@ -81,6 +81,7 @@ namespace WemoNet.Utilities
             GetServerEnvironment,
             GetIconVersion,
             GetSimulatedRuleData,
+            SetBinaryState
         }
     }
 

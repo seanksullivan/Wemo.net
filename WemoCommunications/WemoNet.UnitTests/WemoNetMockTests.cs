@@ -32,11 +32,7 @@ namespace WemoNet.UnitTests
             // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
             var mockRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", responseBytes);
 
-            var wemo = new Wemo
-            {
-                // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
-                GetResponseWebRequest = mockRequest
-            };
+            var wemo = new Wemo(mockRequest, null);
 
             // ACT
             var result = await wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetHomeInfo, ipAddress);
@@ -77,11 +73,7 @@ namespace WemoNet.UnitTests
             // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
             var mockRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", responseBytes);
 
-            var wemo = new Wemo
-            {
-                // Minimal inversion of control: Set the WebRequest property to provide out own Mock'd HttpWebRequest/Response
-                GetResponseWebRequest = mockRequest
-            };
+            var wemo = new Wemo(mockRequest, null);
 
             // ACT
             var returnedHomeInfo = await wemo.GetWemoResponseObjectAsync<GetHomeInfoResponse>(ipAddress);
@@ -108,13 +100,7 @@ namespace WemoNet.UnitTests
             // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
             var setWebRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", setBinaryStateResponseBytes);
 
-            var wemo = new Wemo
-            {
-                // Minimal inversion of control:
-                // Set the WebRequest properties to provide our own Mock'd HttpWebRequest/Response
-                GetResponseWebRequest = mockGetResponseWebRequest,
-                SetResponseWebRequest = setWebRequest
-            };
+            var wemo = new Wemo(mockGetResponseWebRequest, setWebRequest);
 
             // ACT
             var result = await wemo.TurnOnWemoPlugAsync(ipAddress);
@@ -141,13 +127,7 @@ namespace WemoNet.UnitTests
             // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
             var setWebRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", setBinaryStateResponseBytes);
 
-            var wemo = new Wemo
-            {
-                // Minimal inversion of control:
-                // Set the WebRequest properties to provide our own Mock'd HttpWebRequest/Response
-                GetResponseWebRequest = mockGetResponseWebRequest,
-                SetResponseWebRequest = setWebRequest
-            };
+            var wemo = new Wemo(mockGetResponseWebRequest, setWebRequest);
 
             // ACT
             var result = await wemo.ToggleWemoPlugAsync(ipAddress);
@@ -174,12 +154,8 @@ namespace WemoNet.UnitTests
             // Mock the HttpWebRequest and HttpWebResponse (which is within the request)
             var setWebRequest = CreateMockHttpWebRequest(HttpStatusCode.NotModified, "A-OK", setBinaryStateResponseBytes);
 
-            var wemo = new Wemo
+            var wemo = new Wemo(mockGetResponseWebRequest, setWebRequest)
             {
-                // Minimal inversion of control:
-                // Set the WebRequest properties to provide our own Mock'd HttpWebRequest/Response
-                GetResponseWebRequest = mockGetResponseWebRequest,
-                SetResponseWebRequest = setWebRequest,
                 PortNumber = 12345
             };
 
