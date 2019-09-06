@@ -96,9 +96,6 @@ namespace WemoNet.IntegrationTests
         public void ToggleWemoPlugAsync_Verify()
         {
             // ARRANGE
-            var test = true;
-            var wow = Convert.ToInt32(test);
-
             var ipAddress = "http://192.168.86.36";
             var wemo = new Wemo();
 
