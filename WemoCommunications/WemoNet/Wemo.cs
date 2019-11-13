@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -148,12 +149,23 @@ namespace WemoNet
         }
 
         /// <summary>
-        /// Enable or disable (turn on or off) the target Wemo plug.
+        /// Check to see if a given IP address is for a Wemo device.
         /// </summary>
-        /// <param name="ipAddress"></param>
-        /// <param name="on">Turn on = true, Turn off = false</param>
-        /// <returns></returns>
-        private async Task<bool> SetWemoPlugAsync(string ipAddress, bool on)
+        /// <param name="ipAddress">e.g. http://192.168.1.101</param>
+        /// <returns>A KeyValuePair<string,string> populated with the ipaddress and friendly name if an existing Wemo device</string> object .</returns>
+        public async Task<KeyValuePair<string, string>> IsLocalWemoDeviceAsync(string ipAddress)
+        {
+            var plug = new WemoPlug(PortNumber) { BinarySetRequest = _binarySetRequest };
+            return await plug.IsLocalWemoDeviceAsync(ipAddress);
+        }
+
+            /// <summary>
+            /// Enable or disable (turn on or off) the target Wemo plug.
+            /// </summary>
+            /// <param name="ipAddress"></param>
+            /// <param name="on">Turn on = true, Turn off = false</param>
+            /// <returns></returns>
+            private async Task<bool> SetWemoPlugAsync(string ipAddress, bool on)
         {
             bool success = true;
 
