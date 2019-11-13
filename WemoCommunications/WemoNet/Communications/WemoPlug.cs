@@ -219,7 +219,7 @@ namespace WemoNet.Communications
             }
             else
             {
-                new KeyValuePair<string, string>(ipAddress, null);
+                keyValuePair = new KeyValuePair<string, string>(ipAddress, null);
             }
 
             return keyValuePair;
