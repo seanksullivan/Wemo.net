@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>Communications.UnitTests</AssemblyName>
     <RootNamespace>Communications.UnitTests</RootNamespace>
     <PackageId>Communications.UnitTests</PackageId>

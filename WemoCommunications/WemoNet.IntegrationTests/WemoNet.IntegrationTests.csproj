@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>WemoNet.IntegrationTests</AssemblyName>
     <RootNamespace>WemoNet.IntegrationTests</RootNamespace>
     <PackageId>WemoNet.IntegrationTests</PackageId>
