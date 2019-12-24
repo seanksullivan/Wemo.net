@@ -2,7 +2,7 @@
   "profiles": {
     "DotNetCoreConsole": {
       "commandName": "Project",
-      "commandLineArgs": "\"http://192.168.1.5\""
+      "commandLineArgs": "\"http://192.168.86.36\""
     }
   }
 }
