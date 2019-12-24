@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>WemoNet.IntegrationTests</AssemblyName>
     <RootNamespace>WemoNet.IntegrationTests</RootNamespace>
     <PackageId>WemoNet.IntegrationTests</PackageId>

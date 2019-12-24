@@ -9,21 +9,22 @@
     <Authors>Sean K. Sullivan</Authors>
     <Description>.Net Standard 2.0 library providing easy, multi-platform communications with local Wemo devices.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Added ability to use a non-default Port value for Wemo communications.  Added ability to search for all Wemo devices within a local network via var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(192, 168, 10); // The first 3 IP address octets</PackageReleaseNotes>
+    <PackageReleaseNotes>Added ability to use a non-default Port value for Wemo communications.  Added ability to search for all Wemo devices within a local network via: var listOfDevicesFound = await wemo.GetListOfLocalWemoDevicesAsync(192, 168, 10); // The first 3 IP address octets</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) MIT License. All rights reserved.</Copyright>
     <PackageTags>wemo smartplug wemo.net</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.4.5</Version>
-    <AssemblyVersion>1.4.5.0</AssemblyVersion>
-    <FileVersion>1.4.5.0</FileVersion>
+    <AssemblyVersion>1.4.6.0</AssemblyVersion>
+    <FileVersion>1.4.6.0</FileVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>WemoNetSafe.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-    <PackageLicenseUrl>https://github.com/seanksullivan/Wemo.net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/seanksullivan/Wemo.net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/seanksullivan/Wemo.net</RepositoryUrl>
     <RepositoryType />
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -33,6 +34,13 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

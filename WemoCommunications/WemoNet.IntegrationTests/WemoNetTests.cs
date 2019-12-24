@@ -51,14 +51,14 @@ namespace WemoNet.IntegrationTests
         }
 
         [TestMethod]
-        public void GetHomeInfo_Verify()
+        public void GetFriendlyName_Verify()
         {
             // ARRANGE
             var ipAddress = "http://192.168.86.37";
             var wemo = new Wemo();
 
             // ACT
-            var result = wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetHomeInfo, ipAddress).GetAwaiter().GetResult();
+            var result = wemo.GetWemoPlugResponseAsync(Soap.WemoGetCommands.GetFriendlyName, ipAddress).GetAwaiter().GetResult();
 
             // ASSERT
             Assert.IsTrue(result.StatusCode == "OK", "Expected Http StatusCode not returned");
