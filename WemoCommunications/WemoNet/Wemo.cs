@@ -85,6 +85,30 @@ namespace WemoNet
         }
 
         /// <summary>
+        /// Get the state of the target Wemo plug - off (false) or on (true).
+        /// </summary>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
+        public async Task<bool> GetWemoPlugStateAsync(string ipAddress)
+        {
+            var existingState = await GetWemoResponseObjectAsync<GetBinaryStateResponse>(ipAddress);
+
+            var binaryStateValue = false;
+            switch (existingState.BinaryState)
+            {
+                case "0":
+                    binaryStateValue = true;
+                    break;
+
+                case "1":
+                    binaryStateValue = false;
+                    break;
+            }
+
+            return binaryStateValue;
+        }
+
+        /// <summary>
         /// Toggle the target Wemo plug - off or on. If the switch is currently off, it will be enabled, vice-versa.
         /// </summary>
         /// <param name="ipAddress"></param>
